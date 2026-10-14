@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "edp-ingestion"
+version = "0.1.0"
+description = "Framework de ingestão Bronze da plataforma: Event Hubs Capture (Avro) -> Delta via Auto Loader, disparado por file arrival."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+# pyspark é fornecido pelo runtime Databricks (serverless); só é instalado no extra de desenvolvimento.
+dependencies = ["pyyaml>=6,<7"]
+
+[project.optional-dependencies]
+dev = ["pyspark==4.0.*", "pytest>=8", "ruff>=0.8"]
+
+[project.scripts]
+edp-ingestion = "edp_ingestion.main:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/edp_ingestion"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
