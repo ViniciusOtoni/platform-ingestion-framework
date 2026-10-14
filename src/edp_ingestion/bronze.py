@@ -70,11 +70,13 @@ def ingest(spark: SparkSession, spec: IngestionSpec) -> None:
     )
     bronze = to_bronze(capture, F.col("_metadata.file_path"))
 
+    started_at = spark.sql("SELECT current_timestamp() AS t").first()["t"]
     query = (
         bronze.writeStream.option("checkpointLocation", spec.checkpoint_dir)
         .trigger(availableNow=True)
         .toTable(spec.target)
     )
     query.awaitTermination()
-    progress = query.lastProgress or {}
-    log.info("Bronze %s: %s linhas neste ciclo", spec.target, progress.get("numInputRows", 0))
+    # lastProgress vem vazio no Spark Connect (serverless): conta pelo _ingested_at (Bronze é append-only).
+    ingested = spark.table(spec.target).where(F.col("_ingested_at") >= F.lit(started_at)).count()
+    log.info("Bronze %s: %d linhas neste ciclo", spec.target, ingested)

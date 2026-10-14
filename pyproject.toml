@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "edp-ingestion"
-version = "0.1.0"
+version = "0.1.1"
 description = "Framework de ingestão Bronze da plataforma: Event Hubs Capture (Avro) -> Delta via Auto Loader, disparado por file arrival."
 readme = "README.md"
 requires-python = ">=3.12"
