@@ -4,4 +4,4 @@ Event Hubs Capture (Avro) -> Auto Loader -> Delta append-only, num job disparado
 O domínio só declara configuração (YAML); a plataforma executa.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
